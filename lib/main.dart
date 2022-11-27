@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,14 +26,48 @@ class JankenPage extends StatefulWidget {
 }
 
 class _JankenPageState extends State<JankenPage> {
-  //変数
   String myHand = '✊';
+  String comHand = '✊';
+  String result = '引き分け';
 
-  //関数
   void selectHand(String selectedHand) {
+    //自分の手
     myHand = selectedHand;
-    print(selectedHand);
+    //相手の手
+    generateComHand();
+    //結果
+    judge();
     setState(() {}); //画面を更新
+  }
+
+  void generateComHand() {
+    final randomNumber = Random().nextInt(3);
+    comHand = randomNumberToHand(randomNumber);
+  }
+
+  String randomNumberToHand(int randomNumber) {
+    switch (randomNumber) {
+      case 0:
+        return '✊';
+      case 1:
+        return '✌️';
+      case 2:
+        return '✋';
+      default:
+        return '✊';
+    }
+  }
+
+  void judge() {
+    if (comHand == myHand) {
+      result = 'draw';
+    } else if (myHand == '✊' && comHand == '✌️' ||
+        myHand == '✌️' && comHand == '✋' ||
+        myHand == '✋' && comHand == '✊') {
+      result = 'win';
+    } else {
+      result = 'lose';
+    }
   }
 
   @override
@@ -44,6 +80,20 @@ class _JankenPageState extends State<JankenPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              result,
+              style: TextStyle(fontSize: 32),
+            ),
+            SizedBox(
+              height: 64,
+            ),
+            Text(
+              comHand,
+              style: TextStyle(fontSize: 32),
+            ),
+            SizedBox(
+              height: 64,
+            ),
             Text(
               myHand,
               style: TextStyle(fontSize: 32),
